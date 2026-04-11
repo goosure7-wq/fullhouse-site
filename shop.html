@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | Fullhouse Pill</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+        }
+        .sidebar {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            height: fit-content;
+        }
+        .sidebar h3 { margin-bottom: 15px; font-size: 1.1rem; }
+        .filter-list { list-style: none; padding: 0; }
+        .filter-list li { margin-bottom: 10px; }
+        .filter-list a { color: var(--text-muted); }
+        .filter-list a:hover, .filter-list a.active { color: var(--primary); font-weight: 600; }
+        @media (max-width: 768px) {
+            .shop-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-inner">
+            <div class="logo">
+                <a href="index.html"><h1><i class="fa-solid fa-pills"></i> Fullhouse <span>Pill</span></h1></a>
+            </div>
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html" class="active">Shop</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <a href="cart.html" class="cart-icon">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container section-padding">
+        <div class="section-title">
+            <h2>Shop All Medicines</h2>
+            <div class="title-line"></div>
+        </div>
+        
+        <div class="shop-layout">
+            <aside class="sidebar">
+                <h3>Categories</h3>
+                <ul class="filter-list" id="categoryFilters">
+                    <li><a href="#" class="active" onclick="filterShop('All')">All Medicines</a></li>
+                    <li><a href="#" onclick="filterShop('ED Medications')">ED Medications</a></li>
+                    <li><a href="#" onclick="filterShop('PE Medications')">PE Medications</a></li>
+                    <li><a href="#" onclick="filterShop('Hair Loss')">Hair Loss</a></li>
+                    <li><a href="#" onclick="filterShop('Women\'s Health')">Women's Health</a></li>
+                </ul>
+            </aside>
+            <main>
+                <div class="product-grid" id="shopGrid">
+                    <!-- Products rendered via JS -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer implementation left simplified for brevity -->
+    <footer class="footer">
+        <div class="container">
+            <p class="text-center" style="margin-bottom: 20px;">&copy; 2026 Fullhouse Pill.</p>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script>
+        function filterShop(category) {
+            event.preventDefault();
+            // styling active states
+            const links = document.querySelectorAll('.filter-list a');
+            links.forEach(l => l.classList.remove('active'));
+            event.target.classList.add('active');
+
+            renderShop(category);
+        }
+
+        function renderShop(categoryFilter = 'All') {
+            const grid = document.getElementById('shopGrid');
+            if(!grid) return;
+
+            let filtered = products;
+            if(categoryFilter !== 'All') {
+                filtered = products.filter(p => p.category === categoryFilter);
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    ${p.hasDiscount ? '<span class="product-badge">Sale</span>' : ''}
+                     <div style="background: var(--bg-light); display: flex; justify-content: center; align-items: center; height: 220px; color: var(--text-muted);"><i class="fa-solid fa-pills" style="font-size: 3rem; color: #cbd5e1;"></i></div>
+                    <div class="product-content">
+                        <span class="product-cat">${p.category}</span>
+                        <h3 class="product-title"><a href="#">${p.title}</a></h3>
+                        <div class="product-price" style="margin-bottom: 10px;">
+                            ${p.oldPrice ? `<del>$${parseFloat(p.oldPrice).toFixed(2)}</del>` : ''}
+                            $${parseFloat(p.price).toFixed(2)}
+                        </div>
+                        <button style="width:100%; border-radius:4px" class="btn btn-primary" onclick="Cart.addItem(${p.id}); alert('Added to cart!');">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Cart.updateBadge();
+            renderShop();
+        });
+    </script>
+</body>
+</html>
