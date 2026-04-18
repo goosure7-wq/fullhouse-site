@@ -60,7 +60,7 @@ function setupMobileMenu() {
 
     if (toggle && mobileNav && desktopNav) {
         mobileNav.innerHTML = desktopNav.innerHTML; // Copy desktop nav
-        
+
         toggle.addEventListener('click', () => {
             if (mobileNav.style.display === 'block') {
                 mobileNav.style.display = 'none';
@@ -90,7 +90,7 @@ function setupHeader() {
 
 // Initialize logic
 document.addEventListener('DOMContentLoaded', () => {
-    if(typeof Cart !== 'undefined') {
+    if (typeof Cart !== 'undefined') {
         Cart.updateBadge(); // Load initial cart count
     }
     renderProducts();

@@ -3,11 +3,11 @@
    ========================================= */
 :root {
     /* Colors */
-    --primary: #08663d; /* Emerald Green */
-    --primary-light: #108754;
-    --primary-dark: #054528;
+    --primary: #2563eb; /* Blue */
+    --primary-light: #3b82f6;
+    --primary-dark: #1d4ed8;
     --secondary: #1e293b;
-    --accent: #FDA256;
+    --accent: #2563eb;
     
     --text-main: #334155;
     --text-muted: #64748b;
@@ -377,7 +377,7 @@ h1, h2, h3, h4, h5, h6 {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #d1fae5; /* fallback */
+    background-color: #eff6ff; /* fallback */
 }
 
 .hero-overlay {
@@ -398,7 +398,7 @@ h1, h2, h3, h4, h5, h6 {
 .badge {
     display: inline-block;
     padding: 6px 12px;
-    background: rgba(8, 102, 61, 0.1);
+    background: rgba(37, 99, 235, 0.1);
     color: var(--primary);
     border-radius: 20px;
     font-weight: 600;
