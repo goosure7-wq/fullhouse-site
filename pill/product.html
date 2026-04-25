@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Fullhouse Pill</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+        }
+        .product-detail-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+        .detail-image {
+            width: 100%;
+            min-height: 400px;
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 4rem;
+            overflow: hidden;
+        }
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .detail-info h1 {
+            margin-bottom: 0;
+        }
+        .detail-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--text-muted);
+        }
+        .detail-price {
+            font-size: 2rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin: 0;
+        }
+        .detail-old-price {
+            color: var(--text-muted);
+            font-size: 1rem;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+        .detail-section {
+            margin-top: 40px;
+        }
+        .detail-section h3 {
+            margin-bottom: 15px;
+        }
+        .related-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .detail-action {
+            display: grid;
+            gap: 15px;
+            align-items: start;
+        }
+        .detail-action .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+        }
+        .product-description {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.98rem;
+            margin-bottom: 0;
+        }
+        @media (max-width: 900px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-inner">
+            <div class="logo">
+                <a href="index.html"><h1><i class="fa-solid fa-pills"></i> Fullhouse <span>Pill</span></h1></a>
+            </div>
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <a href="cart.html" class="cart-icon">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container section-padding">
+        <div class="section-title">
+            <h2>Product Details</h2>
+            <div class="title-line"></div>
+        </div>
+
+        <div id="productDetail" class="product-detail-grid"></div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-center" style="margin-bottom: 20px;">&copy; 2026 Fullhouse Pill.</p>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function generateStars(rating) {
+            let html = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    html += '<i class="fa-solid fa-star"></i>';
+                } else {
+                    html += '<i class="fa-regular fa-star"></i>';
+                }
+            }
+            return html;
+        }
+
+        function renderDetail() {
+            const productId = parseInt(getQueryParam('id'), 10);
+            const container = document.getElementById('productDetail');
+            if (isNaN(productId)) {
+                container.innerHTML = '<div class="product-detail-card"><p>Invalid product selected. Return to <a href="shop.html">shop</a>.</p></div>';
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                container.innerHTML = '<div class="product-detail-card"><p>Product not found. Return to <a href="shop.html">shop</a>.</p></div>';
+                return;
+            }
+
+            const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+
+            container.innerHTML = `
+                <div class="product-detail-card">
+                    <div class="detail-image">
+                        <img src="${product.image}" alt="${product.title}">
+                    </div>
+                    <div class="detail-info">
+                        <span class="product-cat">${getCategoryIconHtml(product.category)} ${product.category}</span>
+                        <h1>${product.title}</h1>
+                        ${product.subtitle ? `<p class="product-subtitle">${product.subtitle}</p>` : ''}
+                        ${product.description ? `<p class="product-description">${product.description}</p>` : ''}
+                        <div class="product-rating">${generateStars(product.rating)} ${product.rating ? `Rated ${product.rating.toFixed(2)} out of 5` : ''}</div>
+                        <div>
+                            <p class="detail-price">${formatCurrency(product.price)} ${product.price !== product.maxPrice ? `- ${formatCurrency(product.maxPrice)}` : ''}</p>
+                            ${product.oldPrice ? `<span class="detail-old-price">${formatCurrency(product.oldPrice)}</span>` : ''}
+                        </div>
+                        <div class="detail-meta">Price range: ${formatCurrency(product.price)} through ${formatCurrency(product.maxPrice)}</div>
+                        <div class="detail-action">
+                            <input id="productQuantity" type="number" min="1" value="1" class="product-qty">
+                            <button class="btn btn-primary" onclick="addProductToCart(${product.id})">Add to Cart</button>
+                            <p class="product-note">This product has multiple variants. The options may be chosen on the product page.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-detail-card detail-section">
+                    <h3>Product Information</h3>
+                    <p>This is a premium purchase item from Fullhouse Pill. Please choose your desired quantity and variant from the product page. Consult a healthcare professional before using any medication.</p>
+                    <h3>Related Products</h3>
+                    <div class="related-products">
+                        ${related.map(item => `
+                            <a href="product.html?id=${item.id}" class="product-card" style="text-decoration:none;">
+                                <div class="product-content">
+                                    <span class="product-cat">${item.category}</span>
+                                    <h3 class="product-title">${item.title}</h3>
+                                    <div class="product-rating">${generateStars(item.rating)}</div>
+                                    <div class="product-price">${formatCurrency(item.price)} - ${formatCurrency(item.maxPrice)}</div>
+                                </div>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function addProductToCart(productId) {
+            const qtyInput = document.getElementById('productQuantity');
+            const quantity = Math.max(1, parseInt(qtyInput?.value, 10) || 1);
+            Cart.addItem(productId, quantity);
+            Cart.updateBadge();
+            alert(`Added ${quantity} item${quantity === 1 ? '' : 's'} to cart!`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Cart.updateBadge();
+            renderDetail();
+        });
+    </script>
+</body>
+</html>

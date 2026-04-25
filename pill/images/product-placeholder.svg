@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6c63ff"/>
+      <stop offset="100%" stop-color="#5b3aff"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="40" ry="40" fill="#f7f8ff"/>
+  <path d="M120 110c-25 0-45 20-45 45s20 45 45 45h160c25 0 45-20 45-45s-20-45-45-45H120zm0 90c-25 0-45 20-45 45s20 45 45 45h160c25 0 45-20 45-45s-20-45-45-45H120z" fill="url(#grad)" opacity="0.9"/>
+  <circle cx="265" cy="145" r="12" fill="#fff" opacity="0.8"/>
+  <circle cx="135" cy="245" r="12" fill="#fff" opacity="0.8"/>
+  <text x="200" y="360" font-family="Inter, sans-serif" font-size="26" text-anchor="middle" fill="#5b3aff">Fullhouse Pill</text>
+</svg>

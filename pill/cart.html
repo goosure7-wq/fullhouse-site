@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | Fullhouse Pill</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .cart-table th, .cart-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .cart-table th { background: var(--bg-light); color: var(--secondary); }
+        .qty-input { width: 60px; padding: 5px; border: 1px solid var(--border-color); border-radius: 4px; text-align: center; }
+        .remove-btn { color: #ef4444; background: transparent; border: none; cursor: pointer; font-size: 1.2rem; }
+        .cart-summary { background: var(--bg-light); padding: 30px; border-radius: var(--border-radius); }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem;}
+        .summary-total { font-size: 1.5rem; font-weight: 700; border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px; }
+        .empty-cart { text-align: center; padding: 50px; color: var(--text-muted); }
+        @media (max-width: 768px) {
+            .cart-table thead { display: none; }
+            .cart-table td { display: block; text-align: right; border: none; }
+            .cart-table td::before { content: attr(data-label); float: left; font-weight: bold; }
+            .cart-table tr { border-bottom: 1px solid var(--border-color); padding: 15px 0; display: block;}
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-inner">
+            <div class="logo">
+                <a href="index.html"><h1><i class="fa-solid fa-pills"></i> Fullhouse <span>Pill</span></h1></a>
+            </div>
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <a href="cart.html" class="cart-icon">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container section-padding">
+        <div class="section-title">
+            <h2>Your Shopping Cart</h2>
+            <div class="title-line"></div>
+        </div>
+        
+        <div id="cartView">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-center" style="margin-bottom: 20px;">&copy; 2026 Fullhouse Pill.</p>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script>
+        function renderCart() {
+            const container = document.getElementById('cartView');
+            const items = Cart.getItems();
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fa-solid fa-cart-shopping" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 20px;"></i>
+                        <h3>Your cart is currently empty.</h3>
+                        <p>Return to shop to add items to your cart.</p>
+                        <br>
+                        <a href="shop.html" class="btn btn-primary">Return to Shop</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHTML = `
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
+                    <div class="cart-items" style="overflow-x: auto;">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            items.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if(product) {
+                    const subtotal = product.price * item.quantity;
+                    tableHTML += `
+                        <tr>
+                            <td data-label="Product"><strong>${product.title}</strong></td>
+                            <td data-label="Price">$${product.price.toFixed(2)}</td>
+                            <td data-label="Quantity">
+                                <input type="number" class="qty-input" value="${item.quantity}" min="1" onchange="updateRow(${item.id}, this.value)">
+                            </td>
+                            <td data-label="Subtotal">$${subtotal.toFixed(2)}</td>
+                            <td data-label=""><button class="remove-btn" onclick="removeRow(${item.id})"><i class="fa-solid fa-times"></i></button></td>
+                        </tr>
+                    `;
+                }
+            });
+
+            tableHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <h3 style="margin-bottom: 20px;">Cart Totals</h3>
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>$${Cart.getSubtotal().toFixed(2)}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>Free Shipping</span>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <span>Total</span>
+                            <span>$${Cart.getSubtotal().toFixed(2)}</span>
+                        </div>
+                        <a href="checkout.html" class="btn btn-primary" style="width: 100%; margin-top: 20px; text-align: center;">Proceed to Checkout</a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = tableHTML;
+        }
+
+        function updateRow(productId, newQty) {
+            Cart.updateQuantity(productId, newQty);
+            renderCart();
+        }
+
+        function removeRow(productId) {
+            Cart.removeItem(productId);
+            renderCart();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Cart.updateBadge();
+            renderCart();
+        });
+    </script>
+</body>
+</html>
