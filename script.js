@@ -26,31 +26,63 @@ function renderProducts() {
             ${p.hasDiscount ? '<span class="product-badge">Sale</span>' : ''}
             <div style="background: var(--bg-light); display: flex; justify-content: center; align-items: center; height: 220px; color: var(--text-muted);"><i class="fa-solid fa-pills" style="font-size: 3rem; color: #cbd5e1;"></i></div>
             <div class="product-content">
-                <span class="product-cat">${p.category}</span>
-                <h3 class="product-title"><a href="shop.html">${p.title}</a></h3>
+                <span class="product-cat">${getCategoryIconHtml(p.category)} ${p.category}</span>
+                <h3 class="product-title"><a href="product.html?id=${p.id}">${p.title}</a></h3>
+                ${p.subtitle ? `<p class="product-subtitle">${p.subtitle}</p>` : ''}
                 <div class="product-rating">
                     ${generateStars(p.rating)}
                 </div>
-                <div class="product-footer">
-                    <div class="product-price">
-                        ${p.oldPrice ? `<del>${formatCurrency(p.oldPrice)}</del>` : ''}
-                        ${formatCurrency(p.price)}
-                    </div>
-                    <button class="add-to-cart" title="Add to Cart" onclick="handleAddToCart(${p.id})">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                    </button>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">Pill Quantity:</label>
+                    <select class="pill-selector" style="width:100%; padding:8px; border:1px solid var(--border-color); border-radius:4px; margin-bottom:10px;" onchange="updatePrice(this)">
+                        <option value="30" data-price="65">30 Pills</option>
+                        <option value="60" data-price="105">60 Pills</option>
+                        <option value="120" data-price="150">120 Pills</option>
+                        <option value="240" data-price="240">240 Pills</option>
+                        <option value="500" data-price="500">500 Pills</option>
+                    </select>
+                    <div class="product-price-range" style="font-size:1.2rem; font-weight:bold; color:var(--primary);">$65.00</div>
+                </div>
+
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="number" min="1" value="1" class="product-qty" style="width:60px; padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                    <button class="btn add-cart-btn btn-primary" onclick="addToCartFromCard(this, ${p.id})" style="flex:1;"><i class="fa-solid fa-cart-plus"></i> Add</button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-function handleAddToCart(productId) {
-    if (typeof Cart !== 'undefined') {
-        Cart.addItem(productId, 1);
-        alert('Added to cart!');
+function updatePrice(selectElem) {
+    const price = selectElem.options[selectElem.selectedIndex].getAttribute('data-price');
+    const priceDisplay = selectElem.parentElement.querySelector('.product-price-range');
+    if (priceDisplay) {
+        priceDisplay.textContent = '$' + parseFloat(price).toFixed(2);
     }
 }
+
+function handleAddToCart(productId, quantity = 1, pillCount = 30, price = 65) {
+    if (typeof Cart !== 'undefined') {
+        Cart.addItem(productId, quantity, pillCount, price);
+        alert(`Added ${quantity} item(s) of ${pillCount} pills to cart!`);
+    }
+}
+
+function addToCartFromCard(button, productId) {
+    const card = button.closest('.product-card');
+    if (!card) return;
+    
+    const qtyInput = card.querySelector('.product-qty');
+    const quantity = Math.max(1, parseInt(qtyInput?.value, 10) || 1);
+    
+    const pillSelect = card.querySelector('.pill-selector');
+    const pillCount = parseInt(pillSelect.value, 10);
+    const price = parseFloat(pillSelect.options[pillSelect.selectedIndex].getAttribute('data-price'));
+    
+    handleAddToCart(productId, quantity, pillCount, price);
+}
+
 
 // Mobile Menu Toggle
 function setupMobileMenu() {

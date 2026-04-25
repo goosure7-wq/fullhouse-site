@@ -4,36 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop | Fullhouse Pill</title>
+    <meta name="description" content="Shop all medicines at Fullhouse Pill. Browse 106 products across Erectile Dysfunction, Premature Ejaculation, Hair Loss, Narcolepsy, Abortion and more.">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .shop-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 40px;
-        }
-        .sidebar {
-            background: var(--bg-light);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            height: fit-content;
-        }
-        .sidebar h3 { margin-bottom: 15px; font-size: 1.1rem; }
-        .filter-list { list-style: none; padding: 0; }
-        .filter-list li { margin-bottom: 10px; }
-        .filter-list a { color: var(--text-muted); }
-        .filter-list a:hover, .filter-list a.active { color: var(--primary); font-weight: 600; }
-        @media (max-width: 768px) {
-            .shop-layout { grid-template-columns: 1fr; }
-        }
-    </style>
 </head>
 <body>
     <header class="main-header">
         <div class="container header-inner">
             <div class="logo">
-                <a href="index.html"><h1><i class="fa-solid fa-pills"></i> Fullhouse <span>Pill</span></h1></a>
+                <a href="index.html"><h1><i class="fa-solid fa-pills"></i> DIVINECURE <span>PHARMA</span></h1></a>
             </div>
             <nav class="desktop-nav">
                 <ul>
@@ -58,73 +38,384 @@
         </div>
         
         <div class="shop-layout">
-            <aside class="sidebar">
+            <aside class="sidebar" id="shopSidebar">
                 <h3>Categories</h3>
                 <ul class="filter-list" id="categoryFilters">
-                    <li><a href="#" class="active" onclick="filterShop('All')">All Medicines</a></li>
-                    <li><a href="#" onclick="filterShop('ED Medications')">ED Medications</a></li>
-                    <li><a href="#" onclick="filterShop('PE Medications')">PE Medications</a></li>
-                    <li><a href="#" onclick="filterShop('Hair Loss')">Hair Loss</a></li>
-                    <li><a href="#" onclick="filterShop('Women\'s Health')">Women's Health</a></li>
+                    <!-- Populated via JS -->
                 </ul>
             </aside>
             <main>
+                <div class="shop-header">
+                    <span class="result-count" id="resultCount"></span>
+                    <select class="sort-select" id="sortSelect" onchange="handleSortChange()">
+                        <option value="latest">Sort by latest</option>
+                        <option value="price-asc">Sort by price: low to high</option>
+                        <option value="price-desc">Sort by price: high to low</option>
+                        <option value="rating">Sort by average rating</option>
+                    </select>
+                </div>
                 <div class="product-grid" id="shopGrid">
                     <!-- Products rendered via JS -->
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination rendered via JS -->
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Footer implementation left simplified for brevity -->
-    <footer class="footer">
-        <div class="container">
-            <p class="text-center" style="margin-bottom: 20px;">&copy; 2026 Fullhouse Pill.</p>
+   <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <div class="logo">
+                    <h2><i class="fa-solid fa-pills"></i> DIVINECURE <span>PHARMA</span></h2>
+                </div>
+                <p>DivineCure Pharma is a trusted online pharmacy designed to meet your complete healthcare needs. Our mission is to deliver a seamless and hassle-free experience, making quality care easily accessible. From essential medications to lab testing services, everything is delivered straight to your doorstep—ensuring comfort, convenience, and reliability.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Information</h3>
+                <ul>
+                    <li><a href="about.html" target="_blank">About Us</a></li>
+                    <li><a href="blog.html" target="_blank">Blog</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Disclaimer</a></li>
+                    <li><a href="#">Terms and Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul class="contact-list">
+                    <li><i class="fa-solid fa-phone"></i> +14325384436 / +14325384117</li>
+                    <li><i class="fa-solid fa-envelope"></i> contact@divinecurepharma.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; max-width: 900px; line-height: 1.6;">
+                <p style="margin-bottom: 20px;">The content on this website is for informational purposes only and should not be taken as medical advice. It is not a substitute for professional diagnosis, treatment, or guidance from a licensed healthcare provider. Always consult your doctor or qualified health professional before starting, stopping, or changing any medication or treatment.</p>
+                <div class="flex-between">
+                    <p>&copy; 2026 DIVINECURE PHARMA . All rights reserved.</p>
+                    <div class="payment-icons">
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-brands fa-cc-paypal"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="products.js"></script>
     <script>
-        function filterShop(category) {
-            event.preventDefault();
-            // styling active states
-            const links = document.querySelectorAll('.filter-list a');
-            links.forEach(l => l.classList.remove('active'));
-            event.target.classList.add('active');
+        // ======= State =======
+        const ITEMS_PER_PAGE = 12;
+        let currentPage = 1;
+        let currentCategory = 'All';
+        let currentSort = 'latest';
 
-            renderShop(category);
+        // ======= Category Map =======
+        const categoryMap = {
+            'All': { label: 'All Medicines', icon: 'fa-pills' },
+            'Erectile Dysfunction': { label: 'Erectile Dysfunction', icon: 'fa-heart-pulse' },
+            'Cenforce': { label: 'Cenforce', icon: 'fa-capsules' },
+            'Premature Ejaculation': { label: 'Premature Ejaculation', icon: 'fa-clock' },
+            'Hair Loss': { label: 'Hair Loss', icon: 'fa-head-side' },
+            'Narcolepsy': { label: 'Narcolepsy', icon: 'fa-brain' },
+            'Abortion': { label: 'Abortion', icon: 'fa-kit-medical' },
+            "Women's Health": { label: "Women's Health", icon: 'fa-venus' },
+            'Uncategorized': { label: 'Other Medicines', icon: 'fa-tablets' }
+        };
+
+        // ======= Build Category Filters =======
+        function buildCategoryFilters() {
+            const container = document.getElementById('categoryFilters');
+            const counts = {};
+            products.forEach(p => {
+                counts[p.category] = (counts[p.category] || 0) + 1;
+            });
+
+            let html = '';
+            for (const [key, meta] of Object.entries(categoryMap)) {
+                const count = key === 'All' ? products.length : (counts[key] || 0);
+                if (key !== 'All' && count === 0) continue;
+                const activeClass = currentCategory === key ? 'active' : '';
+                html += `<li><a href="#" class="${activeClass}" onclick="filterShop('${key.replace(/'/g, "\\'")}', event)">
+                    <i class="fa-solid ${meta.icon}"></i>
+                    ${meta.label}
+                    <span class="cat-count">${count}</span>
+                </a></li>`;
+            }
+            container.innerHTML = html;
         }
 
-        function renderShop(categoryFilter = 'All') {
-            const grid = document.getElementById('shopGrid');
-            if(!grid) return;
+        // ======= Filter =======
+        function filterShop(category, e) {
+            if (e) e.preventDefault();
+            currentCategory = category;
+            currentPage = 1;
+            buildCategoryFilters();
+            renderShop();
+        }
 
-            let filtered = products;
-            if(categoryFilter !== 'All') {
-                filtered = products.filter(p => p.category === categoryFilter);
+        // ======= Sort =======
+        function handleSortChange() {
+            currentSort = document.getElementById('sortSelect').value;
+            currentPage = 1;
+            renderShop();
+        }
+
+        // ======= Get Filtered + Sorted Products =======
+        function getFilteredProducts() {
+            let filtered = [...products];
+
+            // Category filter
+            if (currentCategory !== 'All') {
+                filtered = filtered.filter(p => p.category === currentCategory);
             }
 
-            grid.innerHTML = filtered.map(p => `
-                <div class="product-card">
-                    ${p.hasDiscount ? '<span class="product-badge">Sale</span>' : ''}
-                     <div style="background: var(--bg-light); display: flex; justify-content: center; align-items: center; height: 220px; color: var(--text-muted);"><i class="fa-solid fa-pills" style="font-size: 3rem; color: #cbd5e1;"></i></div>
-                    <div class="product-content">
+            // Sort
+            switch (currentSort) {
+                case 'price-asc':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    filtered.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'latest':
+                default:
+                    // Keep original order (latest = as scraped)
+                    break;
+            }
+
+            return filtered;
+        }
+
+        // ======= Render Shop =======
+        function renderShop() {
+            const grid = document.getElementById('shopGrid');
+            const resultCountEl = document.getElementById('resultCount');
+            if (!grid) return;
+
+            const filtered = getFilteredProducts();
+            const totalProducts = filtered.length;
+            const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+
+            // Clamp page
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, totalProducts);
+            const pageProducts = filtered.slice(startIdx, endIdx);
+
+            // Result count text
+            resultCountEl.textContent = `Showing ${startIdx + 1}\u2013${endIdx} of ${totalProducts} results`;
+
+            // Render product cards
+            grid.innerHTML = pageProducts.map(p => `
+                <div class="shop-product-card">
+                    ${p.sale ? '<span class="sale-badge">Sale!</span>' : ''}
+                    ${p.outOfStock ? '<span class="oos-badge">Out of stock</span>' : ''}
+                    <div class="product-img-wrap">
+                        <i class="fa-solid fa-pills"></i>
+                    </div>
+                    <div class="product-info">
                         <span class="product-cat">${p.category}</span>
-                        <h3 class="product-title"><a href="#">${p.title}</a></h3>
-                        <div class="product-price" style="margin-bottom: 10px;">
-                            ${p.oldPrice ? `<del>$${parseFloat(p.oldPrice).toFixed(2)}</del>` : ''}
-                            $${parseFloat(p.price).toFixed(2)}
+                        <h3 class="product-name"><a href="product.html?id=${p.id}">${p.title}</a></h3>
+                        ${renderStars(p.rating)}
+                        
+                        <div style="margin: 10px 0;">
+                            <select class="pill-selector" style="width:100%; padding:6px; border:1px solid var(--border-color); border-radius:4px; margin-bottom:8px;" onchange="updatePriceShop(this)">
+                                <option value="30" data-price="65">30 Pills</option>
+                                <option value="60" data-price="105">60 Pills</option>
+                                <option value="120" data-price="150">120 Pills</option>
+                                <option value="240" data-price="240">240 Pills</option>
+                                <option value="500" data-price="500">500 Pills</option>
+                            </select>
+                            <div class="product-price-range shop-price" style="font-size:1.1rem; font-weight:bold; color:var(--primary);">$65.00</div>
                         </div>
-                        <button style="width:100%; border-radius:4px" class="btn btn-primary" onclick="Cart.addItem(${p.id}); alert('Added to cart!');">Add to Cart</button>
+
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="number" min="1" value="1" class="shop-qty" style="width:60px; padding:6px; border:1px solid var(--border-color); border-radius:4px;">
+                            <button class="btn-select-options" style="flex:1" onclick="addShopCart(this, ${p.id}, '${p.title.replace(/'/g, "\\'")}')">
+                                <i class="fa-solid fa-cart-plus" style="margin-right:6px"></i>Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
+
+            // Render pagination
+            renderPagination(totalPages);
+
+            // Scroll to top of grid
+            if (document.querySelector('.shop-header')) {
+                document.querySelector('.shop-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
+        // ======= Pagination =======
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+
+            // Previous arrow
+            if (currentPage > 1) {
+                html += `<a class="arrow" onclick="goToPage(${currentPage - 1})" title="Previous">&larr;</a>`;
+            }
+
+            // Page numbers with ellipsis logic (like the original site)
+            const pages = [];
+            if (totalPages <= 9) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+            } else {
+                pages.push(1);
+                if (currentPage > 4) pages.push('...');
+                
+                let start = Math.max(2, currentPage - 2);
+                let end = Math.min(totalPages - 1, currentPage + 2);
+                
+                if (currentPage <= 4) {
+                    start = 2;
+                    end = Math.min(6, totalPages - 1);
+                }
+                if (currentPage >= totalPages - 3) {
+                    start = Math.max(2, totalPages - 5);
+                    end = totalPages - 1;
+                }
+
+                for (let i = start; i <= end; i++) pages.push(i);
+                
+                if (currentPage < totalPages - 3) pages.push('...');
+                pages.push(totalPages);
+            }
+
+            pages.forEach(p => {
+                if (p === '...') {
+                    html += '<span class="dots">&hellip;</span>';
+                } else if (p === currentPage) {
+                    html += `<span class="active-page">${p}</span>`;
+                } else {
+                    html += `<a onclick="goToPage(${p})">${p}</a>`;
+                }
+            });
+
+            // Next arrow
+            if (currentPage < totalPages) {
+                html += `<a class="arrow" onclick="goToPage(${currentPage + 1})" title="Next">&rarr;</a>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderShop();
+        }
+
+        function updatePriceShop(selectElem) {
+            const price = selectElem.options[selectElem.selectedIndex].getAttribute('data-price');
+            const priceDisplay = selectElem.parentElement.querySelector('.shop-price');
+            if (priceDisplay) {
+                priceDisplay.textContent = '$' + parseFloat(price).toFixed(2);
+            }
+        }
+
+        function addShopCart(button, productId, productTitle) {
+            const card = button.closest('.shop-product-card');
+            if (!card) return;
+            
+            const qtyInput = card.querySelector('.shop-qty');
+            const quantity = Math.max(1, parseInt(qtyInput?.value, 10) || 1);
+            
+            const pillSelect = card.querySelector('.pill-selector');
+            const pillCount = parseInt(pillSelect.value, 10);
+            const price = parseFloat(pillSelect.options[pillSelect.selectedIndex].getAttribute('data-price'));
+            
+            Cart.addItem(productId, quantity, pillCount, price);
+            showCartToast(`${productTitle} (${pillCount} pills)`);
+        }
+
+        // ======= Toast Notification =======
+        function showCartToast(productName) {
+            // Remove existing toast
+            const existing = document.querySelector('.cart-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'cart-toast';
+            toast.innerHTML = `
+                <i class="fa-solid fa-check-circle" style="color:#22c55e; margin-right:8px;"></i>
+                <strong>${productName}</strong> added to cart!
+                <a href="cart.html" style="margin-left:12px; color:var(--primary, #4f46e5); font-weight:600;">View Cart</a>
+            `;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                background: white;
+                color: var(--text-dark, #1e293b);
+                padding: 14px 22px;
+                border-radius: 12px;
+                font-size: 0.9rem;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                animation: slideInUp 0.4s ease;
+                border: 1px solid rgba(0,0,0,0.08);
+                max-width: 400px;
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add toast animation styles
+        const toastStyle = document.createElement('style');
+        toastStyle.textContent = `
+            @keyframes slideInUp {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(10px); }
+            }
+        `;
+        document.head.appendChild(toastStyle);
+
+        // ======= Init =======
         document.addEventListener('DOMContentLoaded', () => {
             Cart.updateBadge();
+            buildCategoryFilters();
             renderShop();
         });
     </script>
 </body>
 </html>
+
